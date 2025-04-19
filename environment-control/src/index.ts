@@ -7,7 +7,7 @@ const mqttClient = mqtt.connect(env.MQTT_URL, {
   password: env.MQTT_PASS,
 });
 
-const topics = ['home/ThermoBeacon/Plant'];
+const topics = ['#'];
 
 mqttClient.on('connect', () => {
   console.log('connected to mqtt broker');
