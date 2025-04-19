@@ -33,16 +33,7 @@ services:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
       - ./mosquitto/log:/mosquitto/log
-      - ./mosquitto/init/create_mosquitto_user.sh:/docker-entrypoint-init.d/create_mosquitto_user.sh
-    environment:
-      - MQTT_USER=/run/secrets/mqtt_user
-      - MQTT_PASSWORD=/run/secrets/mqtt_pass
-    entrypoint: ['/docker-entrypoint-init.d/create_mosquitto_user.sh']
-    command: ['/usr/sbin/mosquitto', '-c', '/mosquitto/config/mosquitto.conf']
     restart: unless-stopped
-    secrets:
-      - mqtt_user
-      - mqtt_pass
 
 secrets:
   mqtt_user:
