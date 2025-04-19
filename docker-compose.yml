@@ -1,0 +1,105 @@
+version: '3.7'
+
+services:
+  thermobeacon: # Thermobeacon server to collect data from the thermobeacons.
+    image: stefanrichterhuber/thermobeaconserver:latest
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    privileged: true # Necessary to have enough permissions to access dbus with bluetooth devices of the host
+    environment:
+      - TZ=Europe/Berlin # Optional set timezone for proper calculation of the next invocation from cron expression
+      - RUST_LOG=debug # Optional set debug level to error/warn/info/debug to resolve connection issues
+      - APP_DEVICES[0]_MAC=78:9f:00:00:05:8a
+      - APP_DEVICES[0]_NAME=Plant
+      - APP_DEVICES[0]_TOPIC=home/ThermoBeacon/Plant
+      - APP_CRON=*/1 * * * *
+      - APP_MQTT_URL=tcp://mosquitto:1883
+      - APP_MQTT_USERNAME=/run/secrets/mqtt_user
+      - APP_MQTT_PASSWORD=/run/secrets/mqtt_pass
+    volumes:
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket # Necessary to access the bluetooth devices of the host
+    secrets:
+      - mqtt_user
+      - mqtt_pass
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: mosquitto
+    ports:
+      - '1883:1883'
+      - '9001:9001'
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+      - ./mosquitto/init/create_mosquitto_user.sh:/docker-entrypoint-init.d/create_mosquitto_user.sh
+    environment:
+      - MQTT_USER=/run/secrets/mqtt_user
+      - MQTT_PASSWORD=/run/secrets/mqtt_pass
+    entrypoint: ['/docker-entrypoint-init.d/create_mosquitto_user.sh']
+    command: ['/usr/sbin/mosquitto', '-c', '/mosquitto/config/mosquitto.conf']
+    restart: unless-stopped
+    secrets:
+      - mqtt_user
+      - mqtt_pass
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    ports:
+      - '8086:8086'
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb2
+      - ./influxdb/config:/etc/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=/run/secrets/influx_user
+      - DOCKER_INFLUXDB_INIT_PASSWORD=/run/secrets/influx_pass
+      - DOCKER_INFLUXDB_INIT_ORG=default
+      - DOCKER_INFLUXDB_INIT_BUCKET=telegraf
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=/run/secrets/influx_token
+    restart: unless-stopped
+    secrets:
+      - influx_token
+      - influx_user
+      - influx_pass
+
+  telegraf:
+    image: telegraf:1.30
+    container_name: telegraf
+    depends_on:
+      - mosquitto
+      - influxdb
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    environment:
+      - INFLUX_TOKEN=/run/secrets/influx_token
+    secrets:
+      - influx_token
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+    restart: unless-stopped
+
+secrets:
+  mqtt_user:
+    file: mqtt_user.txt
+  mqtt_pass:
+    file: mqtt_pass.txt
+  influx_token:
+    file: influx_token.txt
+  influx_user:
+    file: influx_user.txt
+  influx_pass:
+    file: influx_pass.txt
