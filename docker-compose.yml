@@ -44,62 +44,8 @@ services:
       - mqtt_user
       - mqtt_pass
 
-  influxdb:
-    image: influxdb:2.7
-    container_name: influxdb
-    ports:
-      - '8086:8086'
-    volumes:
-      - ./influxdb/data:/var/lib/influxdb2
-      - ./influxdb/config:/etc/influxdb2
-    environment:
-      - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=/run/secrets/influx_user
-      - DOCKER_INFLUXDB_INIT_PASSWORD=/run/secrets/influx_pass
-      - DOCKER_INFLUXDB_INIT_ORG=default
-      - DOCKER_INFLUXDB_INIT_BUCKET=telegraf
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=/run/secrets/influx_token
-    restart: unless-stopped
-    secrets:
-      - influx_token
-      - influx_user
-      - influx_pass
-
-  telegraf:
-    image: telegraf:1.30
-    container_name: telegraf
-    depends_on:
-      - mosquitto
-      - influxdb
-    volumes:
-      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
-    environment:
-      - INFLUX_TOKEN=/run/secrets/influx_token
-    secrets:
-      - influx_token
-    restart: unless-stopped
-
-  grafana:
-    image: grafana/grafana:11.0.0
-    container_name: grafana
-    ports:
-      - '3000:3000'
-    volumes:
-      - ./grafana/data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_SECURITY_ADMIN_USER=admin
-    restart: unless-stopped
-
 secrets:
   mqtt_user:
     file: mqtt_user.txt
   mqtt_pass:
     file: mqtt_pass.txt
-  influx_token:
-    file: influx_token.txt
-  influx_user:
-    file: influx_user.txt
-  influx_pass:
-    file: influx_pass.txt
