@@ -6,9 +6,9 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(['development', 'production', 'test'])
       .default('development'),
-    MQTT_URL: z.string(),
-    MQTT_USER: z.string(),
-    MQTT_PASS: z.string(),
+    MQTT_URL: z.string().default('http://localhost:1883'),
+    MQTT_USER: z.string().default('telegraf'),
+    MQTT_PASS: z.string().default('telegraf'),
   },
 
   /**
