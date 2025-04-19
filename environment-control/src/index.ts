@@ -2,10 +2,7 @@ import mqtt from 'mqtt';
 
 import { env } from './env';
 
-const mqttClient = mqtt.connect(env.MQTT_URL, {
-  username: env.MQTT_USER,
-  password: env.MQTT_PASS,
-});
+const mqttClient = mqtt.connect(env.MQTT_URL);
 
 const topics = ['#'];
 
