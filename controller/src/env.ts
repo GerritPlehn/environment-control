@@ -10,6 +10,9 @@ export const env = createEnv({
     MQTT_USER: z.string().default('telegraf'),
     MQTT_PASS: z.string().default('telegraf'),
     MAX_HISTORY_LENGTH: z.coerce.number().default(60 * 24),
+    MAX_HUMIDITY: z.coerce.number().default(50),
+    MIN_HUMIDITY: z.coerce.number().default(40),
+    SHELLY_URL: z.string().url(),
   },
 
   clientPrefix: 'CLIENT_',
