@@ -11,6 +11,8 @@ export const env = createEnv({
     MQTT_PASS: z.string().default('telegraf'),
   },
 
+  clientPrefix: 'CLIENT_',
+  client: {},
   /**
    * What object holds the environment variables at runtime. This is usually
    * `process.env` or `import.meta.env`.
