@@ -44,4 +44,4 @@ services:
     working_dir: /home/node/app
     ports:
       - '3000:3000'
-    command: bash -c "npm i && npm start"
+    command: sh -c "npm i && npm start"
