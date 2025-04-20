@@ -42,16 +42,19 @@ mqttClient.on('error', (err) => {
 });
 
 const hygroSchema = z.object({
-  battery_level: z.number(),
-  humidity: z.number(),
-  temperature: z.number(),
-  uptime: z.number(),
-  button_pressed: z.boolean(),
-  mac: z.string(),
-  max_temperature: z.number(),
-  min_temperature: z.number(),
-  max_temp_time: z.number(),
-  min_temp_time: z.number(),
+  name: z.string(),
+  data: z.object({
+    battery_level: z.number(),
+    humidity: z.number(),
+    temperature: z.number(),
+    uptime: z.number(),
+    button_pressed: z.boolean(),
+    mac: z.string(),
+    max_temperature: z.number(),
+    min_temperature: z.number(),
+    max_temp_time: z.number(),
+    min_temp_time: z.number(),
+  }),
 });
 
 type HygroUpdate = z.infer<typeof hygroSchema>;
