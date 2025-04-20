@@ -38,7 +38,6 @@ services:
     depends_on:
       - mosquitto
     environment:
-      - MQTT_URL=http://mosquitto:1883
       - SHELLY_URL=http://10.20.0.45
       - MODE=VPD
       - MAX_HUMIDITY=50
