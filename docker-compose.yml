@@ -39,6 +39,7 @@ services:
       - mosquitto
     environment:
       - MQTT_URL=http://mosquitto:1883
+      - SHELLY_URL=http://10.20.0.45
     volumes:
       - ./controller:/home/node/app
     working_dir: /home/node/app
