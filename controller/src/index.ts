@@ -14,7 +14,7 @@ async function hygroControl() {
     // await fetch(`${env.SHELLY_URL}/relay/0?turn=off`);
   }
 }
-setInterval(hygroControl, 1000);
+setInterval(hygroControl, 1000 * 60);
 
 const gracefulShutdown = async () => {
   await mqttClient.endAsync();
