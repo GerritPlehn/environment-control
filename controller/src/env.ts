@@ -9,6 +9,7 @@ export const env = createEnv({
     MQTT_URL: z.string().default('http://localhost:1883'),
     MQTT_USER: z.string().default('telegraf'),
     MQTT_PASS: z.string().default('telegraf'),
+    MAX_HISTORY_LENGTH: z.coerce.number().default(60 * 24),
   },
 
   clientPrefix: 'CLIENT_',
