@@ -1,6 +1,6 @@
 import mqtt from 'mqtt';
 
-import { env } from './env';
+import { env } from './env.js';
 
 const mqttClient = mqtt.connect(env.MQTT_URL);
 
@@ -19,6 +19,14 @@ mqttClient.on('connect', () => {
 
 mqttClient.on('message', (topic, message, packet) => {
   console.log(`message in ${topic}: ${message.toString()}`);
+});
+
+mqttClient.on('error', (err) => {
+  console.error('MQTT Client Error:', err.message);
+  mqttClient.end(true, () => {
+    console.log('MQTT client disconnected due to error');
+    process.exit(1);
+  });
 });
 
 const gracefulShutdown = async () => {

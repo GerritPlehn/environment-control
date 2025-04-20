@@ -4,7 +4,7 @@
   "type": "module",
   "devDependencies": {
     "@biomejs/biome": "1.8.2",
-    "@types/bun": "latest",
+    "@types/node": "^22.14.1",
     "lefthook": "^1.6.18"
   },
   "peerDependencies": {
@@ -12,8 +12,7 @@
   },
   "scripts": {
     "check": "biome check --write .",
-    "dev": "bun src/index.ts",
-    "build": "bun build ./src/index.ts --outdir=dist --minify --target=node"
+    "start": "node src/index.ts"
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.12.0",

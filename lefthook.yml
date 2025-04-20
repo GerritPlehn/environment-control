@@ -8,4 +8,4 @@ skip_output: true
 pre-commit:
   commands:
     check:
-      run: bunx @biomejs/biome check --write --colors=off --log-kind=compact --no-errors-on-unmatched --files-ignore-unknown=true {staged_files} && git update-index --again
+      run: npx @biomejs/biome check --write --colors=off --log-kind=compact --no-errors-on-unmatched --files-ignore-unknown=true {staged_files} && git update-index --again
