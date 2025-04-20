@@ -1,7 +1,7 @@
 import mqtt from 'mqtt';
 import { z } from 'zod';
 
-import { env } from './env.js';
+import { env } from './env.ts';
 
 const mqttClient = mqtt.connect(env.MQTT_URL);
 
