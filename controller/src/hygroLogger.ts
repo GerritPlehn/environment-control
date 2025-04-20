@@ -55,15 +55,26 @@ const hygroSchema = z
       min_temp_time: z.number(),
     }),
   })
-  .transform((x) => ({
-    timestamp: x.timestamp,
-    batteryLevel: x.data.battery_level,
-    humidity: x.data.humidity,
-    temperature: x.data.temperature,
-    uptime: x.data.uptime,
-    mac: x.data.mac,
-    maxTemp: x.data.max_temperature,
-    maxTempTime: x.data.max_temp_time,
-    minTemp: x.data.min_temperature,
-    minTempTime: x.data.min_temp_time,
-  }));
+  .transform((x) => {
+    function calculateVPD(temperature: number, humidity: number) {
+      // 0.6108, 17.27 and 237.3 are standard constants in VPD formula.
+      const saturationVaporPressure =
+        0.6108 * Math.exp((17.27 * temperature) / (temperature + 237.3));
+      const actualVaporPressure = (humidity / 100) * saturationVaporPressure;
+      return saturationVaporPressure - actualVaporPressure;
+    }
+
+    return {
+      timestamp: x.timestamp,
+      batteryLevel: x.data.battery_level,
+      humidity: x.data.humidity,
+      temperature: x.data.temperature,
+      uptime: x.data.uptime,
+      mac: x.data.mac,
+      maxTemp: x.data.max_temperature,
+      maxTempTime: x.data.max_temp_time,
+      minTemp: x.data.min_temperature,
+      minTempTime: x.data.min_temp_time,
+      vpd: calculateVPD(x.data.temperature, x.data.humidity),
+    };
+  });
