@@ -9,7 +9,7 @@ services:
     privileged: true # Necessary to have enough permissions to access dbus with bluetooth devices of the host
     environment:
       - TZ=Europe/Berlin # Optional set timezone for proper calculation of the next invocation from cron expression
-      - RUST_LOG=debug # Optional set debug level to error/warn/info/debug to resolve connection issues
+      - RUST_LOG=info # Optional set debug level to error/warn/info/debug to resolve connection issues
       - APP_DEVICES[0]_MAC=78:9f:00:00:05:8a
       - APP_DEVICES[0]_NAME=Plant
       - APP_DEVICES[0]_TOPIC=home/ThermoBeacon/Plant
@@ -40,6 +40,8 @@ services:
     environment:
       - MQTT_URL=http://mosquitto:1883
       - SHELLY_URL=http://10.20.0.45
+      - MAX_HUMIDITY=50
+      - MIN_HUMIDITY=40
     volumes:
       - ./controller:/home/node/app
     working_dir: /home/node/app

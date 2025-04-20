@@ -1,6 +1,9 @@
 import { mqttClient } from './mqtt.ts';
 import { hygroData } from './hygroLogger.ts';
 import { env } from './env.ts';
+import { serve } from '@hono/node-server';
+import app from './webserver.ts';
+serve({ fetch: app.fetch, port: 3000 });
 
 async function hygroControl() {
   console.log(hygroData);
