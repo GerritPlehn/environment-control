@@ -10,9 +10,11 @@ mqttClient.on('connect', () => {
   console.log('connected to mqtt broker');
   for (const topic of topics) {
     mqttClient.subscribe(topic, (err) => {
-      if (!err) {
-        console.log(`subscribed to ${topic}`);
+      if (err) {
+        console.error(`error while subscribing to topic ${topic}`);
+        return;
       }
+      console.log(`subscribed to ${topic}`);
     });
   }
 });
