@@ -38,6 +38,7 @@ Adapt the environment variables of `controller`
 - `MAX_VPD` VPD at which the Shelly will be turned off, default: `1.2`
 - `MIN_VPD` VPD at which the Shelly will be turned on, default: `0.8`
 - `CHECK_INTERVAL_SEC` Interval at which the controller checks the latest MQTT message, default: `60`
+- `VPD_RESPECT_MAX_HUMIDITY` Only relevant when `MODE` is set to `VPD`. If set to `true` `MAX_HUMIDITY` will still be respected, default `false`
 
 ### First run
 

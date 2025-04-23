@@ -26,7 +26,11 @@ async function hygroControl() {
           console.log('turn off humidifier');
           await fetch(`${env.SHELLY_URL}/relay/0?turn=off`);
         }
-        if (hygroData.vpd > env.MAX_VPD) {
+        if (
+          hygroData.vpd > env.MAX_VPD &&
+          (hygroData.humidity <= env.MAX_HUMIDITY ||
+            !env.VPD_RESPECT_MAX_HUMIDITY)
+        ) {
           console.log('turn on humidifier');
           await fetch(`${env.SHELLY_URL}/relay/0?turn=on`);
         }

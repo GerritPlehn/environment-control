@@ -15,6 +15,9 @@ export const env = createEnv({
     MIN_HUMIDITY: z.coerce.number().default(40),
     MAX_VPD: z.coerce.number().default(0.8),
     MIN_VPD: z.coerce.number().default(1.2),
+    VPD_RESPECT_MAX_HUMIDITY: z
+      .enum(['false', 'true'])
+      .transform((value) => value === 'true'),
     SHELLY_URL: z.string().url(),
     CHECK_INTERVAL_SEC: z.coerce.number().default(60),
     PORT: z.coerce.number().default(3000),
