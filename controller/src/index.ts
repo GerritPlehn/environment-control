@@ -8,6 +8,10 @@ import app from "./webserver.ts";
 serve({ fetch: app.fetch, port: env.PORT });
 
 async function hygroControl() {
+	if (!hygroData) {
+		console.warn("no environment data available yet");
+		return;
+	}
 	console.log({
 		humidity: hygroData.humidity,
 		vpd: hygroData.vpd,
@@ -18,17 +22,17 @@ async function hygroControl() {
 			case "HUMIDITY": {
 				if (hygroData.humidity < env.MIN_HUMIDITY) {
 					await humidifier("on");
-					break;
+					return;
 				}
 				if (hygroData.humidity > env.MAX_HUMIDITY) {
 					await humidifier("off");
 				}
-				break;
+				return;
 			}
 			case "VPD": {
 				if (hygroData.vpd < env.MIN_VPD) {
 					await humidifier("off");
-					break;
+					return;
 				}
 				if (hygroData.vpd > env.MAX_VPD) {
 					if (
@@ -38,12 +42,12 @@ async function hygroControl() {
 						console.log(
 							"max VPD exceeded, but max humidity already reached: not turning on",
 						);
-						break;
+						return;
 					}
 					await humidifier("on");
-					break;
+					return;
 				}
-				break;
+				return;
 			}
 			default: {
 				assertNever(env.MODE);
