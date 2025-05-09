@@ -61,11 +61,16 @@ const hygroSchema = z
 	})
 	.transform((x) => {
 		function calculateVPD(temperature: number, humidity: number) {
-			// 0.6108, 17.27 and 237.3 are standard constants in VPD formula.
-			const saturationVaporPressure =
-				0.6108 * Math.exp((17.27 * temperature) / (temperature + 237.3));
-			const actualVaporPressure = (humidity / 100) * saturationVaporPressure;
-			return saturationVaporPressure - actualVaporPressure;
+			const leafTemp = temperature + env.LEAF_TEMP_OFFSET;
+			const vpsat =
+				(610.7 * 10 ** ((7.5 * leafTemp) / (237.3 + leafTemp))) / 1000;
+			const vpair =
+				(((610.7 * 10 ** ((7.5 * temperature) / (237.3 + temperature))) /
+					1000) *
+					humidity) /
+				100;
+
+			return vpsat - vpair;
 		}
 
 		return {

@@ -26,6 +26,7 @@ export const env = createEnv({
 			.number()
 			.default(0)
 			.transform((minutes) => minutes * 60 * 1000),
+		LEAF_TEMP_OFFSET: z.coerce.number().default(-2),
 	},
 
 	clientPrefix: "CLIENT_",

@@ -59,6 +59,7 @@ Adapt the environment variables of `controller`
 - `CHECK_INTERVAL_SEC` Interval at which the controller checks the latest MQTT message, default: `60`
 - `VPD_RESPECT_MAX_HUMIDITY` Only relevant when `MODE` is set to `VPD`. If set to `true` `MAX_HUMIDITY` will still be respected, default `false`
 - `MIN_SWITCH_TIME` Minimum minutes that need to have passed in order to switch again, default: `0`
+- `LEAF_TEMP_OFFSET` Offset for the leaf temperature in Kelvin, default: `-2`
 
 ### First run
 

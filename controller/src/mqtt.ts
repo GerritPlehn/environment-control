@@ -21,7 +21,6 @@ mqttClient.on("connect", () => {
 });
 
 mqttClient.on("message", async (topic, message, packet) => {
-	console.log(`message in ${topic}: ${message.toString()}`);
 	handleHygroMqttMessage(message);
 });
 
