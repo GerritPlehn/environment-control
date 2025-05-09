@@ -13,6 +13,10 @@ export function handleHygroMqttMessage(message: Buffer<ArrayBufferLike>) {
 			...JSON.parse(message.toString()),
 			timestamp,
 		});
+		if (hygroData && hygroData.uptime > hygroUpdate.uptime) {
+			console.warn("received hygro update out of order!");
+			return;
+		}
 		handleHygroUpdate(hygroUpdate);
 	} catch (error) {
 		console.error("Error while parsing MQTT packet", error);
