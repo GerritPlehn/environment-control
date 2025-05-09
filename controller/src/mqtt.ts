@@ -1,6 +1,7 @@
 import mqtt from "mqtt";
 import { env } from "./env.ts";
 import { handleHygroMqttMessage } from "./hygroLogger.ts";
+import { humidifier } from "./index.ts";
 
 export const mqttClient = mqtt.connect(env.MQTT_URL);
 
@@ -27,8 +28,7 @@ mqttClient.on("message", async (topic, message, packet) => {
 mqttClient.on("error", (err) => {
 	console.error("MQTT Client Error:", err.message);
 	mqttClient.end(true, () => {
-		// TODO: what should happen when the program crashes? Do we need to change the shelly state?
 		console.log("MQTT client disconnected due to error");
-		process.exit(1);
+		humidifier("off").then(() => process.exit(1));
 	});
 });

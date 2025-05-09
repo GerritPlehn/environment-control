@@ -8,6 +8,11 @@ import app from "./webserver.ts";
 serve({ fetch: app.fetch, port: env.PORT });
 
 async function hygroControl() {
+	console.log({
+		humidity: hygroData.humidity,
+		vpd: hygroData.vpd,
+		temperature: hygroData.temperature,
+	});
 	try {
 		switch (env.MODE) {
 			case "HUMIDITY": {
@@ -51,7 +56,7 @@ async function hygroControl() {
 setInterval(hygroControl, 1000 * env.CHECK_INTERVAL_SEC);
 
 let lastToggle: Date;
-async function humidifier(state: "on" | "off") {
+export async function humidifier(state: "on" | "off") {
 	console.log(`turning humidifier ${state}`);
 	if (
 		new Date().getTime() - (lastToggle?.getTime() ?? 0) <
@@ -69,6 +74,7 @@ async function humidifier(state: "on" | "off") {
 
 const gracefulShutdown = async () => {
 	await mqttClient.endAsync();
+	await humidifier("off");
 	console.log("closed connections");
 	process.exit();
 };
