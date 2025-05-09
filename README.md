@@ -25,6 +25,25 @@ git clone https://github.com/GerritPlehn/environment-control.git
 cd environment-control
 ```
 
+It is also highly recommended to add a [dead man's switch](./shelly-deadman.js) as a script to your Shelly to ensure that the outlet is turned off when the controller goes offline. While the controller tries to switch off the outlet when the controller shuts down, an unexpected crash might occur anyways.
+
+```js
+function checkStatus() {
+  Shelly.call(
+    'http.get',
+    { url: 'http://[your-controller-ip]:3000' },
+    function (res, error_code) {
+      if (error_code || res.code !== 200) {
+        Shelly.call('Switch.Set', { id: 0, on: false });
+      }
+    }
+  );
+}
+
+// check every 60 seconds
+Timer.set(60000, true, checkStatus);
+```
+
 ### Configuration
 
 In `docker-compose.yml` change the `APP_DEVICES[0]_MAC` to correspond to your hygrometers bluetooth MAC. Refer to the official [Thermobeacon server docs](https://github.com/StefanRichterHuber/Thermobeacon-server?tab=readme-ov-file#configuration) for further info. Note that only 1 hygrometer is supported by this project.
