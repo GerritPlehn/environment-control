@@ -13,8 +13,8 @@ export const env = createEnv({
 		MODE: z.enum(["VPD", "HUMIDITY"]).default("VPD"),
 		MAX_HUMIDITY: z.coerce.number().default(50),
 		MIN_HUMIDITY: z.coerce.number().default(40),
-		MAX_VPD: z.coerce.number().default(0.8),
-		MIN_VPD: z.coerce.number().default(1.2),
+		MAX_VPD: z.coerce.number().default(1.2),
+		MIN_VPD: z.coerce.number().default(0.8),
 		VPD_RESPECT_MAX_HUMIDITY: z
 			.enum(["false", "true"])
 			.default("false")

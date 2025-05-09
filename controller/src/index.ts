@@ -16,6 +16,10 @@ async function hygroControl() {
 		humidity: hygroData.humidity,
 		vpd: hygroData.vpd,
 		temperature: hygroData.temperature,
+		min_vpd: env.MIN_VPD,
+		max_vpd: env.MAX_VPD,
+		min_rlf: env.MIN_HUMIDITY,
+		max_rlf: env.MAX_HUMIDITY,
 	});
 	try {
 		switch (env.MODE) {
