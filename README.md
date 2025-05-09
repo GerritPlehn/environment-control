@@ -25,7 +25,7 @@ git clone https://github.com/GerritPlehn/environment-control.git
 cd environment-control
 ```
 
-It is also highly recommended to add a [dead man's switch](./shelly-deadman.js) as a script to your Shelly to ensure that the outlet is turned off when the controller goes offline. While the controller tries to switch off the outlet when the controller shuts down, an unexpected crash might occur anyways.
+It is also highly recommended to add a [dead man's switch](https://en.wikipedia.org/wiki/Dead_man%27s_switch) as a script to your Shelly to ensure that the outlet is turned off when the controller goes offline. While the controller tries to switch off the outlet when the controller shuts down, an unexpected crash might occur anyways.
 
 ```js
 function checkStatus() {
