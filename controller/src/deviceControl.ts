@@ -1,14 +1,14 @@
 import { env } from "./env.ts";
 
-export async function humidifier(state: "on" | "off") {
-	await device("humidifier", state);
-}
-export async function dehumidifier(state: "on" | "off") {
-	await device("dehumidifier", state);
-}
-
 type State = "on" | "off";
 type Device = "humidifier" | "dehumidifier";
+
+export async function humidifier(state: State) {
+	await device("humidifier", state);
+}
+export async function dehumidifier(state: State) {
+	await device("dehumidifier", state);
+}
 
 export const toggles: Record<Device, { time: Date; state: State }[]> = {
 	humidifier: [],
