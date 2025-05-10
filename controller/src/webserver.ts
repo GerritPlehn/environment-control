@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { env } from "./env.ts";
 import { hygroData } from "./hygroLogger.ts";
+import { toggles } from "./deviceControl.ts";
 const app = new Hono();
 
 app.get("/", (c) =>
@@ -12,6 +13,7 @@ app.get("/", (c) =>
 			minVPD: env.MIN_VPD,
 			maxVPD: env.MAX_VPD,
 		},
+		toggles,
 		hygroData,
 	}),
 );

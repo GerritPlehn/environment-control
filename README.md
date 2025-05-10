@@ -50,7 +50,8 @@ In `docker-compose.yml` change the `APP_DEVICES[0]_MAC` to correspond to your hy
 
 Adapt the environment variables of `controller`
 
-- `SHELLY_URL` Set to your Shelly's address, e.g. `http://10.20.0.41`
+- `HUMIDIFIER_SHELLY_URL` Set to your humidifier's Shelly address, e.g. `http://10.20.0.41` (optional)
+- `DEHUMIDIFIER_SHELLY_URL` Set to your dehumidifier's Shelly address, e.g. `http://10.20.0.42` (optional)
 - `MODE` Either `VPD` or `HUMIDITY`, default: `VPD`
 - `MAX_HUMIDITY` Humidity at which the Shelly will be turned off, default: `50`
 - `MIN_HUMIDITY` Humidity at which the Shelly will be turned on, default: `40`
@@ -73,7 +74,7 @@ You'll see a lot of log output on your screen that will be helpful for eventual 
 
 Verify functionality (check the API on `http://YOUR_PI_IP:3000`), terminate the process with `Ctrl+C` if you need to do changes to the configuration or have finished setup.
 
-### Regular Use
+## Usage
 
 Run the utility with
 
@@ -92,3 +93,19 @@ To stop the process
 ```bash
 docker compose down
 ```
+
+## Functionality
+
+The controller has the ability to control up to 2 devices: a humidifier and a dehumidifier.
+
+![Graph illustrating the behavior of the controller according to the description below](./img/control.png)
+
+When the MAX value of the selected mode is exceeded, the device used for lowering the value is turned on.
+
+When the MIN value of the selected mode is exceeded, the device used for increasing the value is turned on.
+
+The respective device is turned off once the mid-point between MIN and MAX value is reached, in order to avoid having both devices working against each other constantly.
+
+As an example: When operating in `HUMIDITY` mode with a MIN of 45% and a MAX of 55%, the humidifier will be turned on when the humidity is below 45% and will then be turned off after it reaches 50% ((45%+55%)/2).
+
+When the humidity exeeds 55%, the dehumidifier will be turned on and turned off after it reaches 50% yet again.
