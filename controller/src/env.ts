@@ -19,7 +19,8 @@ export const env = createEnv({
 			.enum(["false", "true"])
 			.default("false")
 			.transform((value) => value === "true"),
-		SHELLY_URL: z.string().url(),
+		HUMIDIFIER_SHELLY_URL: z.string().url().optional(),
+		DEHUMIDIFIER_SHELLY_URL: z.string().url().optional(),
 		CHECK_INTERVAL_SEC: z.coerce.number().default(60),
 		PORT: z.coerce.number().default(3000),
 		MIN_SWITCH_TIME: z.coerce
