@@ -33,6 +33,8 @@ app.get("/debug", (c) => {
 			minTempTime: 507284,
 			vpd: 1.3101806375293394,
 		});
+		toggles.dehumidifier.push({ time: new Date(), state: "on" });
+		toggles.humidifier.push({ time: new Date(), state: "on" });
 	}
 	return c.json(200);
 });
