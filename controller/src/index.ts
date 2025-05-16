@@ -90,6 +90,9 @@ setInterval(hygroControl, 1000 * env.CHECK_INTERVAL_SEC);
 serve({ fetch: app.fetch, port: env.PORT });
 
 async function gracefulShutdown() {
+	await humidifier("off");
+	await dehumidifier("off");
+	console.log("turned off devices");
 	await mqttClient.endAsync();
 	console.log("closed connections");
 	process.exit();
