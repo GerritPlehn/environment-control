@@ -1,7 +1,7 @@
 import mqtt from "mqtt";
 import { env } from "./env.ts";
 import { handleHygroMqttMessage } from "./hygroLogger.ts";
-import { humidifier } from "./index.ts";
+import { humidifier, dehumidifier } from "./deviceControl.ts";
 
 export const mqttClient = mqtt.connect(env.MQTT_URL);
 
@@ -26,8 +26,11 @@ mqttClient.on("message", async (topic, message, packet) => {
 
 mqttClient.on("error", (err) => {
 	console.error("MQTT Client Error:", err.message);
-	mqttClient.end(true, () => {
+	mqttClient.end(true, async () => {
 		console.log("MQTT client disconnected due to error");
-		humidifier("off").then(() => process.exit(1));
+		await humidifier("off");
+		await dehumidifier("off");
+		console.log("turned off devices");
+		process.exit(1);
 	});
 });
