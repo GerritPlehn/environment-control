@@ -23,7 +23,7 @@ export function handleHygroMqttMessage(message: Buffer<ArrayBufferLike>) {
  * Manage the current `hygroData` and the history.
  * @param hygroUpdate the update that was just received
  */
-function handleHygroUpdate(hygroUpdate: HygroUpdate) {
+export function handleHygroUpdate(hygroUpdate: HygroUpdate) {
 	if (!hygroData) {
 		// instantiate hygroData on first update
 		hygroData = { ...hygroUpdate, history: [hygroUpdate] };
