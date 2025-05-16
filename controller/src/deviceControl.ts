@@ -41,4 +41,8 @@ export async function device(name: Device, state: State) {
 
 	await fetch(`${deviceUrl}/relay/0?turn=${state}`);
 	toggles[name].push({ time: new Date(), state });
+	if (toggles[name].length > env.MAX_HISTORY_LENGTH) {
+		// discard oldest history item when max history size has been reached
+		toggles[name].shift();
+	}
 }
